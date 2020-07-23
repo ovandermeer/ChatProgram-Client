@@ -30,6 +30,7 @@ public class Chat_GUI {
 	public static JTextArea ta = new JTextArea();
     private JFrame frame = new JFrame("Chat Frame");
     private DataManager myData = new DataManager();
+    private User myUser = new User();
     
 	public void startGUI(){
 		createGUI();
@@ -61,7 +62,7 @@ public class Chat_GUI {
 	     joinChatButton.addActionListener(
 		  			new ActionListener() {
 		  				public void actionPerformed(ActionEvent e) {
-		  					String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat :)");
+		  					String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
 							  myNetwork.connectToServer("localhost", Integer.parseInt(port));
 							  if(myNetwork.connectedToServer == true) {
 								myNetwork.listenForMessage();
@@ -69,16 +70,35 @@ public class Chat_GUI {
 		  				}
 		  			}
 		  		);
-	     JMenuItem startChatButton = new JMenuItem("Start new chat server");
+	     JMenuItem startChatButton = new JMenuItem("Start new chat");
 	     startChatButton.addActionListener(
 		  			new ActionListener() {
 		  				public void actionPerformed(ActionEvent e) {
-		  					System.out.println("Program exited with 'Quit Program' from the connection menu.");
-		  					System.exit(0);
+		  					
+		  				}
+		  			}
+		  		);
+	     JMenuItem join3rdPartyChatButton = new JMenuItem("Join existing chat on a third-party server");
+	     join3rdPartyChatButton.addActionListener(
+		  			new ActionListener() {
+		  				public void actionPerformed(ActionEvent e) {
+		  					String server = JOptionPane.showInputDialog(frame, "Please enter the server address for the third-party server");
+		  					String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
+							  myNetwork.connectToServer(server, Integer.parseInt(port));
+							  if(myNetwork.connectedToServer == true) {
+								myNetwork.listenForMessage();
+							  }
 		  				}
 		  			}
 		  		);
 	     JMenuItem exitChatButton = new JMenuItem("Exit chat");
+	     exitChatButton.addActionListener(
+		  			new ActionListener() {
+		  				public void actionPerformed(ActionEvent e) {
+		  					myNetwork.logoutFromServer(myUser.username);
+		  				}
+		  			}
+		  		);
 	     JMenuItem quitProgramButton = new JMenuItem("Quit program");
 	     quitProgramButton.addActionListener(
 	  			new ActionListener() {
@@ -185,6 +205,7 @@ public class Chat_GUI {
 	
 	public void sendMessage(String message) {
 		appendMessage(message, "You", ta);
+		
 	}
 	
 	public String authenticateUser(String username) {

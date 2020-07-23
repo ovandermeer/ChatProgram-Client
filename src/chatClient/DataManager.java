@@ -12,7 +12,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class DataManager {
+public class DataManager {	
 	public char testForFile() {
 		try {
 		      File myObj = new File("userData.json");

@@ -1,11 +1,12 @@
 package chatClient;
 
 public class User {
+	DataManager myData = new DataManager();
+	Chat_GUI myGUI = new Chat_GUI();
+	NetworkManager myNet = new NetworkManager();
+	
 	public String username;
-	public void StartUser() {
-		DataManager myData = new DataManager();
-		Chat_GUI myGUI = new Chat_GUI();
-		
+	public void StartUser() {		
 		char fileExists = myData.testForFile();
 		
 		String password = "";
@@ -42,6 +43,6 @@ public class User {
 		}
 	}
 	public void sendMessage(String messageToBeSent) {
-		
+		myNet.sendMessage(messageToBeSent, username);
 	}
 }

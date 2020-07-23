@@ -9,7 +9,6 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 
 class reciveMessageThread extends Thread {
 	private DataManager myData = new DataManager();
@@ -33,14 +32,12 @@ class reciveMessageThread extends Thread {
 	        	din=new DataInputStream(sock.getInputStream());
 				String recivedMessage = din.readUTF();
 				System.out.println(recivedMessage);
-				
-				String[] parsedMessage = new String[2];
 	            
-				parsedMessage = recivedMessage.split("/");
+				String[] parsedMessage = recivedMessage.split("/");
 				
-				System.out.println(Arrays.toString(parsedMessage));
-	            
-	            myGUI.appendMessage(parsedMessage[1], parsedMessage[0], Chat_GUI.ta);
+				if(parsedMessage[0] == "message") {
+					myGUI.appendMessage(parsedMessage[2], parsedMessage[1], Chat_GUI.ta);
+				}
 			}
 			catch(SocketTimeoutException e){
 				myGUI.showMessage("No messages have been sent in five minutes. Disconnecting and closing room.");
@@ -66,6 +63,8 @@ public class NetworkManager {
 	public boolean connectedToServer = false;
 	
 	private DataManager myData = new DataManager();
+	
+	private DataOutputStream dout;
 	
 	public void connectToServer(String server, int port) {
 		Chat_GUI myGUI = new Chat_GUI();
@@ -105,8 +104,8 @@ public class NetworkManager {
 	
 	public void sendMessage(String message, String username) {
 		try {
-			DataOutputStream dout=new DataOutputStream(s.getOutputStream());
-			String outputString = username + "^" + message;
+			dout=new DataOutputStream(s.getOutputStream());
+			String outputString = "message/" + username + "/" + message;
 			
 			dout.writeUTF(outputString);
 			dout.flush();
@@ -121,10 +120,27 @@ public class NetworkManager {
 
 	}
 	
+	public void logoutFromServer(String username) {
+		try {
+			dout=new DataOutputStream(s.getOutputStream());
+			dout.writeUTF("system/" + username + "/logout");
+			dout.flush();
+		} catch (IOException e1) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e1.printStackTrace(pw);
+			String sStackTrace = sw.toString(); // stack trace as a string
+			myData.createLog(sStackTrace);
+			e1.printStackTrace();
+			e1.printStackTrace();
+		}
+	}
+	
 	public void listenForMessage() {
 		reciveMessageThread myThread = new reciveMessageThread(s);		
 		myThread.start();
 	}
+	
 }
 
 // TODO message status, user routing, login, check version
