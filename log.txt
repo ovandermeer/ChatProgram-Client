@@ -1,0 +1,10 @@
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:325)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:350)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:803)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:982)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:977)
+	at java.base/java.io.DataInputStream.readUnsignedShort(DataInputStream.java:341)
+	at java.base/java.io.DataInputStream.readUTF(DataInputStream.java:593)
+	at java.base/java.io.DataInputStream.readUTF(DataInputStream.java:568)
+	at mainModule/chatClient.reciveMessageThread.run(Unknown Source)
