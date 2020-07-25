@@ -1,15 +1,22 @@
 package chatClient;
 
 public class User {
-	DataManager myData = new DataManager();
-	Chat_GUI myGUI = new Chat_GUI();
-	NetworkManager myNet = new NetworkManager();
-	
+	DataManager myData;
+	NetworkManager myNet;
+	public Chat_GUI myGUI;
 	public String username;
+
+	public User(Chat_GUI thisGUI) {
+		myGUI = thisGUI;
+		myNet = new NetworkManager(thisGUI);
+		myData = new DataManager(thisGUI);
+	}
 	public void StartUser() {		
 		char fileExists = myData.testForFile();
 		
 		String password = "";
+
+		//Chat_GUI myGUI = new Chat_GUI();
 		
 		if(fileExists == 'y') {
 			String[] JSONData = myData.parseJSONData();
@@ -41,6 +48,7 @@ public class User {
 			myGUI.errorHasOccured(01);
 			System.exit(0);
 		}
+		myGUI.ta.append("Welcome " + username + "\r\n");
 	}
 	public void sendMessage(String messageToBeSent) {
 		myNet.sendMessage(messageToBeSent, username);

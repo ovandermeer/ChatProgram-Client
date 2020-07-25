@@ -27,19 +27,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class Chat_GUI {
-	public static JTextArea ta = new JTextArea();
+	public JTextArea ta = new JTextArea();
     private JFrame frame = new JFrame("Chat Frame");
-    private DataManager myData = new DataManager();
-    private User myUser = new User();
-    
-	public void startGUI(){
-		createGUI();
-		
-		User myUser = new User();
-		myUser.StartUser();
-	}
+	private DataManager myData = new DataManager(this);
+	public User myUser;
+	NetworkManager myNetwork = new NetworkManager(this);
 	
-	public void createGUI() {
+	public Chat_GUI() {
 
 		//Creating the Frame
 	     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,17 +50,19 @@ public class Chat_GUI {
 	     mb.add(connectionMenu);	     
 	     mb.add(helpMenu);
 	     
-	     NetworkManager myNetwork = new NetworkManager();
-	     
 	     JMenuItem joinChatButton = new JMenuItem("Join existing chat");
 	     joinChatButton.addActionListener(
 		  			new ActionListener() {
 		  				public void actionPerformed(ActionEvent e) {
-		  					String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
-							  myNetwork.connectToServer("localhost", Integer.parseInt(port));
-							  if(myNetwork.connectedToServer == true) {
-								myNetwork.listenForMessage();
-							  }
+							if(myNetwork.connectedToServer = false) {
+								String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
+								myNetwork.connectToServer("localhost", Integer.parseInt(port));
+								if(myNetwork.connectedToServer == true) {
+									myNetwork.listenForMessage();
+								}
+						  	} else {
+								  showMessage("You are already in a chat! Please leave your current chat before joining a new one!");
+							}
 		  				}
 		  			}
 		  		);
@@ -74,7 +70,17 @@ public class Chat_GUI {
 	     startChatButton.addActionListener(
 		  			new ActionListener() {
 		  				public void actionPerformed(ActionEvent e) {
-		  					
+							if(myNetwork.connectedToServer = false) {
+								String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
+								myNetwork.startNewServer("localhost", Integer.parseInt(port));
+								if(myNetwork.connectedToServer == true) {
+										myNetwork.listenForMessage();
+								} else {
+									showMessage("An error has occured, and the chat could not be started.");
+								}
+							} else {
+								showMessage("You are already in a chat! Please leave your current chat before starting a new one!");
+							}
 		  				}
 		  			}
 		  		);
@@ -82,12 +88,17 @@ public class Chat_GUI {
 	     join3rdPartyChatButton.addActionListener(
 		  			new ActionListener() {
 		  				public void actionPerformed(ActionEvent e) {
-		  					String server = JOptionPane.showInputDialog(frame, "Please enter the server address for the third-party server");
-		  					String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
-							  myNetwork.connectToServer(server, Integer.parseInt(port));
-							  if(myNetwork.connectedToServer == true) {
-								myNetwork.listenForMessage();
-							  }
+							if(myNetwork.connectedToServer = false){
+								showMessage("You are joining a chat on an unmoderated third-party server. Please note that PixelFyre INC. is not responsible for anything that happens on this server, and cannot guarentee the functionality of our client on an uncontrolled server. Proceed with caution. \n By connecting to a third party server, you agree to the terms and conditions outlined in our 'Third-Party connections licence agreement' document.");
+								String server = JOptionPane.showInputDialog(frame, "Please enter the server address for the third-party server");
+								String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
+								myNetwork.connectToServer(server, Integer.parseInt(port));
+								if(myNetwork.connectedToServer == true) {
+									myNetwork.listenForMessage();
+								}
+							} else {
+								showMessage("You are already in a chat! Please leave your current chat before joining a new one!");
+							}
 		  				}
 		  			}
 		  		);
@@ -95,7 +106,11 @@ public class Chat_GUI {
 	     exitChatButton.addActionListener(
 		  			new ActionListener() {
 		  				public void actionPerformed(ActionEvent e) {
-		  					myNetwork.logoutFromServer(myUser.username);
+							if(myNetwork.connectedToServer = true) {
+								  myNetwork.logoutFromServer(myUser.username);
+							} else {
+								showMessage("You are not in a chat! Please connect to a chat before disconnecting!");
+							}
 		  				}
 		  			}
 		  		);
@@ -103,7 +118,8 @@ public class Chat_GUI {
 	     quitProgramButton.addActionListener(
 	  			new ActionListener() {
 	  				public void actionPerformed(ActionEvent e) {
-	  					System.out.println("Program exited with 'Quit Program' from the connection menu.");
+						if(myNetwork.connectedToServer = false) {
+							System.out.println("Program exited with 'Quit Program' from the connection menu.");
 	  					PrintStream out;
 						try {
 							out = new PrintStream(new FileOutputStream("output.txt"));
@@ -118,6 +134,9 @@ public class Chat_GUI {
 						}
 	  					
 	  					System.exit(0);
+						} else {
+							showMessage("You are currently connected to a chat. Please click the 'Exit chat' button that is either beside the text box, or under the 'Connection' menu on the top bar.");
+						}
 	  				}
 	  			}
 	  		);
@@ -184,8 +203,12 @@ public class Chat_GUI {
 	     exit.addActionListener(
 	 			new ActionListener() {
 	 				public void actionPerformed(ActionEvent e) {
-	 					System.out.println("Program exited with 'Exit Chat' button");
-	 					System.exit(0);
+						if(myNetwork.connectedToServer = true) {
+							System.out.println("Chat exited with 'Exit Chat' button");
+							myNetwork.logoutFromServer(myUser.username);
+						} else {
+							showMessage("You are not in a chat! Please connect to a chat before disconnecting!");
+						}
 	 				}
 	 			}
 	 		);
@@ -204,8 +227,7 @@ public class Chat_GUI {
 	}
 	
 	public void sendMessage(String message) {
-		appendMessage(message, "You", ta);
-		
+		myNetwork.sendMessage(message, myUser.username);
 	}
 	
 	public String authenticateUser(String username) {
@@ -220,8 +242,7 @@ public class Chat_GUI {
 		
 		String newUsername = JOptionPane.showInputDialog(frame, "What would you like your username to be? This will be public to users you chat with, so don't use your real name.", null);
 		String newPassword = JOptionPane.showInputDialog(frame, "What would you like the password to be for user: " + newUsername + "?", null);
-		
-		DataManager myData = new DataManager();
+
 		myData.createFile(newUsername, newPassword);
 	}
 	public void errorHasOccured(int errorNo) {
@@ -233,7 +254,10 @@ public class Chat_GUI {
 	public void loggedError() {
 		JOptionPane.showMessageDialog(frame, "An error has occured. Please check log.txt for more information.");
 	}
-	public void appendMessage(String message, String user, JTextArea ta) {
+	public void appendMessage(String message, String user) {
+		if(user.equals(myUser.username)){
+			user = "You";
+		}
 		System.out.println("Entered string append");
 		String displayString = user + ": " + message + "\r\n";
 		ta.append(displayString);

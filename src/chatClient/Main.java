@@ -4,8 +4,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		Chat_GUI myGUI = new Chat_GUI();
-		
-		myGUI.startGUI();
+
+		User myUser = new User(myGUI);
+		myGUI.myUser = myUser;
+
+		myUser.StartUser();
 	}
 
 }

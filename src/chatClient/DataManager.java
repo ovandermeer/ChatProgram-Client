@@ -12,7 +12,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class DataManager {	
+public class DataManager {
+	Chat_GUI myGUI;
+
+	public DataManager(Chat_GUI importedGUI) {
+		myGUI = importedGUI;
+	}
+
 	public char testForFile() {
 		try {
 		      File myObj = new File("userData.json");
@@ -98,7 +104,6 @@ public class DataManager {
 		
 	}
 	public void createLog(String errorTrace) {
-		Chat_GUI myGUI = new Chat_GUI();
 		
 		try {
 		      FileWriter myWriter = new FileWriter("log.txt");
