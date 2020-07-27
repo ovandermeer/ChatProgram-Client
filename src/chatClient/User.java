@@ -51,7 +51,7 @@ public class User {
 				myGUI.ta.append("Welcome " + username + "\r\n");
 			} catch(NullPointerException e) {
 				System.out.println("Null entry");
-				myGUI.improperAuth(username);
+				System.exit(0);
 			}
 		}
 	}
