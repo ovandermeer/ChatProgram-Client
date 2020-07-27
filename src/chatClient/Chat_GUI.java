@@ -84,24 +84,44 @@ public class Chat_GUI {
 		  				}
 		  			}
 		  		);
-	     JMenuItem join3rdPartyChatButton = new JMenuItem("Join existing chat on a third-party server");
-	     join3rdPartyChatButton.addActionListener(
-		  			new ActionListener() {
-		  				public void actionPerformed(ActionEvent e) {
-							if(myNetwork.connectedToServer == false){
-								showMessage("You are joining a chat on an unmoderated third-party server. Please note that PixelFyre INC. is not responsible for anything that happens on this server, and cannot guarentee the functionality of our client on an uncontrolled server. Proceed with caution. \n By connecting to a third party server, you agree to the terms and conditions outlined in our 'Third-Party connections licence agreement' document.");
-								String server = JOptionPane.showInputDialog(frame, "Please enter the server address for the third-party server");
-								String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
-								myNetwork.connectToServer(server, Integer.parseInt(port));
-								if(myNetwork.connectedToServer == true) {
-									myNetwork.listenForMessage();
+		JMenuItem join3rdPartyChatButton = new JMenuItem("Join existing chat on a third-party server");
+			join3rdPartyChatButton.addActionListener(
+						new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								if(myNetwork.connectedToServer == false){
+									showMessage("You are joining a chat on an unmoderated third-party server. Please note that PixelFyre INC. is not responsible for anything that happens on this server, and cannot guarentee the functionality of our client on an uncontrolled server. Proceed with caution. \n By connecting to a third party server, you agree to the terms and conditions outlined in our 'Third-Party connections licence agreement' document.");
+									String server = JOptionPane.showInputDialog(frame, "Please enter the server address for the third-party server");
+									String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
+									myNetwork.connectToServer(server, Integer.parseInt(port));
+									if(myNetwork.connectedToServer == true) {
+										myNetwork.listenForMessage();
+									}
+								} else {
+									showMessage("You are already in a chat! Please leave your current chat before joining a new one!");
 								}
-							} else {
-								showMessage("You are already in a chat! Please leave your current chat before joining a new one!");
 							}
-		  				}
-		  			}
-		  		);
+						}
+					);
+
+		JMenuItem start3rdPartyChatServerButton = new JMenuItem("Start a new chat on a third-party server");
+			join3rdPartyChatButton.addActionListener(
+						new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								if(myNetwork.connectedToServer == false){
+									showMessage("You are joining a chat on an unmoderated third-party server. Please note that PixelFyre INC. is not responsible for anything that happens on this server, and cannot guarentee the functionality of our client on an uncontrolled server. Proceed with caution. \n By connecting to a third party server, you agree to the terms and conditions outlined in our 'Third-Party connections licence agreement' document.");
+									String server = JOptionPane.showInputDialog(frame, "Please enter the server address for the third-party server");
+									String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
+									myNetwork.startNewServer(server, Integer.parseInt(port));
+									if(myNetwork.connectedToServer == true) {
+										myNetwork.listenForMessage();
+									}
+								} else {
+									showMessage("You are already in a chat! Please leave your current chat before starting a new one!");
+								}
+							}
+						}
+					);
+		
 	     JMenuItem exitChatButton = new JMenuItem("Exit chat");
 	     exitChatButton.addActionListener(
 		  			new ActionListener() {
@@ -141,7 +161,9 @@ public class Chat_GUI {
 	  			}
 	  		);
 	     connectionMenu.add(joinChatButton);
-	     connectionMenu.add(startChatButton);
+		 connectionMenu.add(startChatButton);
+		 connectionMenu.add(join3rdPartyChatButton);
+		 connectionMenu.add(start3rdPartyChatServerButton);
 	     connectionMenu.add(exitChatButton);
 	     connectionMenu.add(quitProgramButton);
 	     
