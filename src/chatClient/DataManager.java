@@ -30,6 +30,7 @@ public class DataManager {
 		        return 'y';
 		      }
 		    } catch (IOException e1) {
+		    	//error handler
 		    	StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e1.printStackTrace(pw);

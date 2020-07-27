@@ -54,14 +54,14 @@ public class Chat_GUI {
 	     joinChatButton.addActionListener(
 		  			new ActionListener() {
 		  				public void actionPerformed(ActionEvent e) {
-							if(myNetwork.connectedToServer = false) {
+							if(myNetwork.connectedToServer == false) {
 								String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
-								myNetwork.connectToServer("localhost", Integer.parseInt(port));
+								myNetwork.connectToServer("192.168.1.25", Integer.parseInt(port));
 								if(myNetwork.connectedToServer == true) {
 									myNetwork.listenForMessage();
 								}
 						  	} else {
-								  showMessage("You are already in a chat! Please leave your current chat before joining a new one!");
+								showMessage("You are already in a chat! Please leave your current chat before joining a new one!");
 							}
 		  				}
 		  			}
@@ -70,9 +70,9 @@ public class Chat_GUI {
 	     startChatButton.addActionListener(
 		  			new ActionListener() {
 		  				public void actionPerformed(ActionEvent e) {
-							if(myNetwork.connectedToServer = false) {
+							if(myNetwork.connectedToServer == false) {
 								String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
-								myNetwork.startNewServer("localhost", Integer.parseInt(port));
+								myNetwork.startNewServer("192.168.1.25", Integer.parseInt(port));
 								if(myNetwork.connectedToServer == true) {
 										myNetwork.listenForMessage();
 								} else {
@@ -88,7 +88,7 @@ public class Chat_GUI {
 	     join3rdPartyChatButton.addActionListener(
 		  			new ActionListener() {
 		  				public void actionPerformed(ActionEvent e) {
-							if(myNetwork.connectedToServer = false){
+							if(myNetwork.connectedToServer == false){
 								showMessage("You are joining a chat on an unmoderated third-party server. Please note that PixelFyre INC. is not responsible for anything that happens on this server, and cannot guarentee the functionality of our client on an uncontrolled server. Proceed with caution. \n By connecting to a third party server, you agree to the terms and conditions outlined in our 'Third-Party connections licence agreement' document.");
 								String server = JOptionPane.showInputDialog(frame, "Please enter the server address for the third-party server");
 								String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
@@ -106,7 +106,7 @@ public class Chat_GUI {
 	     exitChatButton.addActionListener(
 		  			new ActionListener() {
 		  				public void actionPerformed(ActionEvent e) {
-							if(myNetwork.connectedToServer = true) {
+							if(myNetwork.connectedToServer == true) {
 								  myNetwork.logoutFromServer(myUser.username);
 							} else {
 								showMessage("You are not in a chat! Please connect to a chat before disconnecting!");
@@ -118,7 +118,7 @@ public class Chat_GUI {
 	     quitProgramButton.addActionListener(
 	  			new ActionListener() {
 	  				public void actionPerformed(ActionEvent e) {
-						if(myNetwork.connectedToServer = false) {
+						if(myNetwork.connectedToServer == false) {
 							System.out.println("Program exited with 'Quit Program' from the connection menu.");
 	  					PrintStream out;
 						try {
@@ -203,7 +203,7 @@ public class Chat_GUI {
 	     exit.addActionListener(
 	 			new ActionListener() {
 	 				public void actionPerformed(ActionEvent e) {
-						if(myNetwork.connectedToServer = true) {
+						if(myNetwork.connectedToServer == true) {
 							System.out.println("Chat exited with 'Exit Chat' button");
 							myNetwork.logoutFromServer(myUser.username);
 						} else {
@@ -245,9 +245,9 @@ public class Chat_GUI {
 
 		myData.createFile(newUsername, newPassword);
 	}
-	public void errorHasOccured(int errorNo) {
-		JOptionPane.showMessageDialog(frame, "An error has occured. Error code: " + errorNo);
-	}
+	//public void errorHasOccured(int errorNo) {
+	//	JOptionPane.showMessageDialog(frame, "An error has occured. Error code: " + errorNo);
+	//}
 	public void showMessage(String messageToShow) {
 		JOptionPane.showMessageDialog(frame, messageToShow);
 	}

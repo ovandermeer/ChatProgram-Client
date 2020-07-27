@@ -80,7 +80,7 @@ public class NetworkManager {
 	private Socket tempSocket;
 	private Socket s;
 
-	public boolean connectedToServer = false;
+	public boolean connectedToServer;
 	
 	private DataManager myData;
 	
@@ -91,6 +91,7 @@ public class NetworkManager {
 	public NetworkManager(Chat_GUI thisGUI) {
 		myGUI = thisGUI;
 		myData = new DataManager(myGUI);
+		connectedToServer = false;
 	}
 	
 	public void connectToServer(String server, int port) {
