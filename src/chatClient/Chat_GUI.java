@@ -56,7 +56,7 @@ public class Chat_GUI {
 		  				public void actionPerformed(ActionEvent e) {
 							if(myNetwork.connectedToServer == false) {
 								String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
-								myNetwork.connectToServer("192.168.1.25", Integer.parseInt(port));
+								myNetwork.connectToServer("localhost", Integer.parseInt(port));
 								if(myNetwork.connectedToServer == true) {
 									myNetwork.listenForMessage();
 								}
@@ -72,7 +72,7 @@ public class Chat_GUI {
 		  				public void actionPerformed(ActionEvent e) {
 							if(myNetwork.connectedToServer == false) {
 								String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
-								myNetwork.startNewServer("192.168.1.25", Integer.parseInt(port));
+								myNetwork.startNewServer("localhost", Integer.parseInt(port));
 								if(myNetwork.connectedToServer == true) {
 										myNetwork.listenForMessage();
 								} else {

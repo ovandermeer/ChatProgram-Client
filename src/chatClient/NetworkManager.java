@@ -108,11 +108,14 @@ public class NetworkManager {
 
 			System.out.println("BILO");
 
+			System.out.println(serverResponse);
+
 			if(serverResponse.startsWith("personalThread")) {
 				tempSocket.close();
 				String[] parsedResponse = serverResponse.split("/");
 				s = new Socket(server, Integer.parseInt(parsedResponse[1]));
 				connectedToServer = true;
+				System.out.println("SILO");
 			}
 		} catch (UnknownHostException e1) {
 			StringWriter sw = new StringWriter();
