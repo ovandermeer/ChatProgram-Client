@@ -89,7 +89,7 @@ public class Chat_GUI {
 						new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
 								if(myNetwork.connectedToServer == false){
-									showMessage("You are joining a chat on an unmoderated third-party server. Please note that PixelFyre INC. is not responsible for anything that happens on this server, and cannot guarentee the functionality of our client on an uncontrolled server. Proceed with caution. \n By connecting to a third party server, you agree to the terms and conditions outlined in our 'Third-Party connections licence agreement' document.");
+									showMessage("You are joining a chat on an unmoderated third-party server. Please note that PixelFyre INC. is not responsible for anything \nthat happens on this server, and cannot guarentee the functionality of our client on an uncontrolled server. Proceed with caution. \n By connecting to a third party server, you agree to the terms and conditions outlined in our 'Third-Party connections licence agreement' document.");
 									String server = JOptionPane.showInputDialog(frame, "Please enter the server address for the third-party server");
 									String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
 									myNetwork.connectToServer(server, Integer.parseInt(port));
@@ -104,11 +104,11 @@ public class Chat_GUI {
 					);
 
 		JMenuItem start3rdPartyChatServerButton = new JMenuItem("Start a new chat on a third-party server");
-			join3rdPartyChatButton.addActionListener(
+			start3rdPartyChatServerButton.addActionListener(
 						new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
 								if(myNetwork.connectedToServer == false){
-									showMessage("You are joining a chat on an unmoderated third-party server. Please note that PixelFyre INC. is not responsible for anything that happens on this server, and cannot guarentee the functionality of our client on an uncontrolled server. Proceed with caution. \n By connecting to a third party server, you agree to the terms and conditions outlined in our 'Third-Party connections licence agreement' document.");
+									showMessage("You are joining a chat on an unmoderated third-party server. Please note that PixelFyre INC. is not responsible for anything \nthat happens on this server, and cannot guarentee the functionality of our client on an uncontrolled server. Proceed with caution. \n By connecting to a third party server, you agree to the terms and conditions outlined in our 'Third-Party connections licence agreement' document.");
 									String server = JOptionPane.showInputDialog(frame, "Please enter the server address for the third-party server");
 									String port = JOptionPane.showInputDialog(frame, "Please enter the session ID of your chat");
 									myNetwork.startNewServer(server, Integer.parseInt(port));
@@ -205,9 +205,13 @@ public class Chat_GUI {
 	     tf.addActionListener(
 		 			new ActionListener() {
 		 				public void actionPerformed(ActionEvent e) {
-		 					String textInput = tf.getText();
-		 					sendMessage(textInput);
-		 					tf.setText("");
+							if(myNetwork.connectedToServer == false) {
+								showMessage("You have to be connected to a server to send a message!");
+							} else {
+								String textInput = tf.getText();
+								sendMessage(textInput);
+								tf.setText("");
+							}
 		 				}
 		 			}
 		 		);
@@ -215,9 +219,13 @@ public class Chat_GUI {
 	     send.addActionListener(
 	 			new ActionListener() {
 	 				public void actionPerformed(ActionEvent e) {
-	 					String textInput = tf.getText();
-	 					sendMessage(textInput);
-	 					tf.setText("");
+						if(myNetwork.connectedToServer == false) {
+							showMessage("You have to be connected to a server to send a message!");
+						} else {
+							String textInput = tf.getText();
+							sendMessage(textInput);
+							tf.setText("");
+						}
 	 				}
 	 			}
 	 		);
@@ -249,7 +257,10 @@ public class Chat_GUI {
 	}
 	
 	public void sendMessage(String message) {
-		myNetwork.sendMessage(message, myUser.username);
+		System.out.println("|" + message + "|");
+		if(!message.isBlank()) {
+			myNetwork.sendMessage(message, myUser.username);
+		}		
 	}
 	
 	public String authenticateUser(String username) {
