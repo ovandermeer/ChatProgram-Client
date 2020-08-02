@@ -127,7 +127,7 @@ public class Chat_GUI {
 		  			new ActionListener() {
 		  				public void actionPerformed(ActionEvent e) {
 							if(myNetwork.connectedToServer == true) {
-								  myNetwork.logoutFromServer(myUser.username);
+								  myNetwork.logoutFromServer();
 							} else {
 								showMessage("You are not in a chat! Please connect to a chat before disconnecting!");
 							}
@@ -235,7 +235,7 @@ public class Chat_GUI {
 	 				public void actionPerformed(ActionEvent e) {
 						if(myNetwork.connectedToServer == true) {
 							System.out.println("Chat exited with 'Exit Chat' button");
-							myNetwork.logoutFromServer(myUser.username);
+							myNetwork.logoutFromServer();
 						} else {
 							showMessage("You are not in a chat! Please connect to a chat before disconnecting!");
 						}

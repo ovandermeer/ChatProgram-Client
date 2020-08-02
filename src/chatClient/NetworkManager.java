@@ -19,11 +19,13 @@ class reciveMessageThread extends Thread {
 	
 	private Socket sock;
 	private DataInputStream din;
+	private NetworkManager myNetwork;
 		
-	public reciveMessageThread(Socket importedSocket, Chat_GUI thisGUI) {
+	public reciveMessageThread(Socket importedSocket, Chat_GUI thisGUI, NetworkManager thisNetwork) {
 		sock = importedSocket;
 		myGUI = thisGUI;
 		myData = new DataManager(myGUI);
+		myNetwork = thisNetwork;
 	}
 	
 	public void run()
@@ -51,6 +53,7 @@ class reciveMessageThread extends Thread {
 			}
 			catch(SocketTimeoutException e){
 				myGUI.showMessage("No messages have been sent in five minutes. Disconnecting and closing room.");
+				myNetwork.logoutFromServer();
 			}
 			catch(SocketException e1) {
 				StringWriter sw = new StringWriter();
@@ -208,7 +211,7 @@ public class NetworkManager {
 
 	}
 	
-	public void logoutFromServer(String username) {
+	public void logoutFromServer() {
 		try {
 			dout=new DataOutputStream(s.getOutputStream());
 			dout.writeUTF("system/logout");
@@ -227,7 +230,7 @@ public class NetworkManager {
 	}
 	
 	public void listenForMessage() {
-		reciveMessageThread myThread = new reciveMessageThread(s, myGUI);		
+		reciveMessageThread myThread = new reciveMessageThread(s, myGUI, this);
 		myThread.start();
 	}
 	
